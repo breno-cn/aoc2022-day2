@@ -1,7 +1,6 @@
 use core::{panic, str};
-use std::{collections::HashMap};
 
-#[derive(Eq, PartialEq, Hash, Clone, Copy)]
+#[derive(Clone, Copy)]
 enum Hand { Rock, Paper, Scissor }
 
 fn str_to_hand(hand: &str) -> Hand {
@@ -64,27 +63,25 @@ fn determine_hand(oponent: &Hand, me: &str) -> Hand {
 }
 
 fn play_match(oponent: &Hand, me: &Hand) -> i32 {
-    let results = HashMap::from([
-        (Hand::Rock, HashMap::from([
-            (Hand::Paper, 0),
-            (Hand::Rock, 3),
-            (Hand::Scissor, 6)  
-        ])),
+    match me {
+        Hand::Rock => match oponent {
+            Hand::Paper   => 0,
+            Hand::Rock    => 3,
+            Hand::Scissor => 6
+        },
 
-        (Hand::Paper, HashMap::from([
-            (Hand::Scissor, 0),
-            (Hand::Paper, 3),
-            (Hand::Rock, 6)
-        ])),
+        Hand::Paper => match oponent {
+            Hand::Scissor => 0,
+            Hand::Paper   => 3,
+            Hand::Rock    => 6
+        },
 
-        (Hand::Scissor, HashMap::from([
-            (Hand::Rock, 0),
-            (Hand::Scissor, 3),
-            (Hand::Paper, 6)
-        ]))
-    ]);
-
-    results[me][oponent]
+        Hand::Scissor => match oponent {
+            Hand::Rock    => 0,
+            Hand::Scissor => 3,
+            Hand::Paper   => 6
+        }
+    }
 }
 
 fn hand_score(hand: &Hand) -> i32 {
